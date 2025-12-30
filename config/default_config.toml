@@ -1,0 +1,139 @@
+# FileForge Configuration File
+# This is the default configuration template
+# Copy to ~/.fileforge/config.toml and customize as needed
+
+[database]
+# SQLite database file path
+path = "~/.fileforge/fileforge.db"
+# Enable Write-Ahead Logging for better concurrency
+wal_mode = true
+# Enable vector similarity search capabilities
+vector_search = true
+
+[scanning]
+# File extensions to scan
+extensions = [
+  ".jpg", ".jpeg", ".png", ".gif", ".bmp", ".tiff", ".webp",
+  ".pdf", ".doc", ".docx", ".txt", ".rtf", ".odt",
+  ".mp4", ".avi", ".mov", ".mkv", ".wmv", ".flv",
+  ".mp3", ".wav", ".flac", ".aac", ".ogg", ".m4a"
+]
+# Glob patterns for paths to exclude
+exclusions = [
+  "*/node_modules/*", "*/.git/*", "*/venv/*", "*/__pycache__/*",
+  "*/build/*", "*/dist/*", "*/.cache/*", "*/temp/*", "*/tmp/*"
+]
+# Maximum file size to process in megabytes
+max_size_mb = 500
+# Follow symbolic links during scanning
+follow_symlinks = false
+# Recursively scan subdirectories
+recursive = true
+
+[ocr]
+# OCR engine to use (paddleocr or tesseract)
+engine = "paddleocr"
+# Languages for OCR recognition (ISO 639-1 codes)
+languages = ["en"]
+# Use GPU acceleration if available
+gpu_enabled = true
+# Minimum confidence score for OCR results (0.0-1.0)
+confidence_threshold = 0.5
+
+[vision]
+# Vision model for object detection
+model = "yolo-world"
+# Minimum confidence for object detection (0.0-1.0)
+confidence = 0.25
+# Batch size for vision processing
+batch_size = 8
+# Device for inference (null=auto, "cpu", "cuda:0", etc.)
+device = null
+
+[llm]
+# LLM model identifier (Ollama format)
+model = "qwen2.5:14b"
+# Sampling temperature for LLM generation (0.0-2.0)
+temperature = 0.7
+# Ollama API base URL
+base_url = "http://localhost:11434"
+# Request timeout in seconds
+timeout = 120
+
+[faces]
+# Face detection model (retinaface or mtcnn)
+detector = "retinaface"
+# Face embedding model for recognition
+embedding_model = "Facenet512"
+# Minimum face size in pixels
+min_face_size = 30
+# DBSCAN epsilon for face clustering (0.0-2.0)
+clustering_eps = 0.6
+
+[nsfw]
+# Enable NSFW content detection
+enabled = true
+# NSFW categories to flag
+categories_to_flag = ["porn", "hentai", "sexy"]
+# Minimum confidence to flag as NSFW (0.0-1.0)
+threshold = 0.6
+
+[processing]
+# Batch size for processing operations
+batch_size = 32
+# GPU device ID (null for auto-detection)
+gpu_device = null
+# Number of worker threads/processes
+num_workers = 4
+# Save checkpoint every N files
+checkpoint_interval = 100
+
+[output]
+# Generate sidecar metadata files
+sidecars_enabled = true
+# Write Windows alternate data streams (ADS)
+windows_metadata = true
+# Default report output format (json, html, csv, markdown)
+report_format = "json"
+
+[organization]
+# Organization rules (empty by default - add as needed)
+rules = []
+
+# Naming templates by file type
+naming_templates = { photo = "{date:%Y-%m-%d}_{original_name}", document = "{category}/{date:%Y}/{original_name}", video = "Videos/{date:%Y-%m}/{original_name}" }
+
+# Default category for unmatched files
+default_category = "Uncategorized"
+
+# Example organization rules (commented out):
+# [[organization.rules]]
+# name = "Photos by Year"
+# pattern = "*.{jpg,jpeg,png}"
+# destination = "Photos/{year}/{month}"
+# conditions = { has_exif = true }
+#
+# [[organization.rules]]
+# name = "Documents by Type"
+# pattern = "*.{pdf,doc,docx}"
+# destination = "Documents/{category}"
+
+[logging]
+# Logging level (DEBUG, INFO, WARNING, ERROR, CRITICAL)
+level = "INFO"
+# Log file path (null for no file logging)
+file_path = "~/.fileforge/logs/fileforge.log"
+# Log rotation size/time (e.g., "10 MB", "1 day")
+rotation = "10 MB"
+# Enable console logging
+console = true
+
+# Environment Variable Overrides
+# All settings can be overridden with FILEFORGE_ prefix:
+#
+# FILEFORGE_DATABASE__PATH=/custom/path/db.sqlite
+# FILEFORGE_OCR__ENGINE=tesseract
+# FILEFORGE_PROCESSING__NUM_WORKERS=8
+# FILEFORGE_LOGGING__LEVEL=DEBUG
+#
+# Use double underscore (__) to separate nested config sections
